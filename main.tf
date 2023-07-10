@@ -42,8 +42,3 @@ data "aws_subnets" "default" {
 resource "aws_s3_bucket" "backups" {
   bucket_prefix = "valheim-backup-${lower(var.world_name)}"
 }
-
-resource "aws_s3_bucket_acl" "backups" {
-  bucket = aws_s3_bucket.backups.id
-  acl    = "private"
-}
