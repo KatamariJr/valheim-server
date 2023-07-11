@@ -3,7 +3,7 @@ locals {
   script_backup = base64encode(templatefile("${path.module}/scripts/backup.sh.tftpl",
     {
       bucket_id = aws_s3_bucket.backups.id
-  }))
+    }))
   script_setup_healthcheck = file("${path.module}/scripts/setup_healthcheck.sh")
 }
 
@@ -50,6 +50,25 @@ EOF
   lifecycle {
     create_before_destroy = true
   }
+}
+
+
+resource "aws_autoscaling_schedule" "valheim_off" {
+  scheduled_action_name  = "valheim_off"
+  min_size               = 0
+  max_size               = 1
+  desired_capacity       = 0
+  recurrence             = var.valheim_off_cron
+  autoscaling_group_name = aws_autoscaling_group.valheim.name
+}
+
+resource "aws_autoscaling_schedule" "valheim_on" {
+  scheduled_action_name  = "valheim_on"
+  min_size               = 0
+  max_size               = 1
+  desired_capacity       = 1
+  recurrence             = var.valheim_on_cron
+  autoscaling_group_name = aws_autoscaling_group.valheim.name
 }
 
 resource "aws_security_group" "cluster_instance" {

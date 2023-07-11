@@ -59,3 +59,10 @@ variable "world_update" {
 variable "world_update_schedule" {
   default = "0 6 * * *"
 }
+
+variable "valheim_on_cron" {
+  type = string
+}
+variable "valheim_off_cron" {
+  type = string
+}
